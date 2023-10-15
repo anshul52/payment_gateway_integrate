@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>
+  </title>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+
+<body>
+  <h4>Lunch Box</h4>
+  <img
+    src="https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcRzIOdFN0OI3oAHFqhsrWB0FU3ps9Wq4-_No_90futwnTYh9O7eInEFtDqWbuuSsMKW9XT0J0L06OX26FzyhCfimskG4HFhy5dWYLG7c0oCD5vhPzFFpb09Z1rxzp4XRymrV2o1S2UhO30&usqp=CAc"
+    alt="">
+  <p>buy now</p>
+  <h4>INR 399 only</h4>
+  <button id="rzp-button1">Pay with Razorpay</button>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  
+  <script>
+
+    
+    var orderId;
+$(document).ready(function () {  //route hit hoo gaaa
+      var settings = {
+        "url": "/create/orderId",
+        "method": "POST",
+        "timeout": 0,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "data": JSON.stringify({
+          "amount": "39900"
+        }),
+      };
+
+    
+// ------------------------------------------------------------
+
+
+    document.getElementById('rzp-button1').onclick = function (e) {
+
+      $.ajax(settings).done(function (response) {
+        orderId = response.orderId;
+        alert(JSON.stringify(response));
+        // console.log(response);
+        var options = {
+        "key": response.key_id, // Enter the Key ID generated from the Dashboard
+        "amount": "39900", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+        "currency": "INR",
+        "name": "Lunch Box",
+        "description": "buy and use it",
+        "image": "data:image/png;base64,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",
+        "order_id": orderId, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+        "handler": function (response) {
+          alert(response.razorpay_payment_id);
+          alert(response.razorpay_order_id);
+          alert(response.razorpay_signature);
+          window.location.href = "/success"
+        },
+        "theme": {
+          "color": "red"
+        }
+      }
+        
+        var rzp1 = new Razorpay(options);
+        rzp1.on('payment.failed', function (response) {
+          alert(response.error.code);
+        });
+      })
+      
+      rzp1.open();
+    };
+});
+  </script>
+</body>
+
+</html>
